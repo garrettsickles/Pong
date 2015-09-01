@@ -13,14 +13,16 @@ var initialize_canvas = function() {
 } 
   
 var pongBall = {
-  dx: 1,
-  dy: 1,
+  dx: -10,
+  dy: -1,
   rad: 10,
   x: canvasWidth / 2,
   y: canvasHeight / 2
 }
 
 var leftPaddle = { 
+  height: 100,
+  width: 10,
   x: 20,
   y: canvasHeight / 2
 }
@@ -40,7 +42,10 @@ var draw = function () {
   context.strokeStyle = "white";
 
   // draw paddles and ball
-
+  context.rect(leftPaddle.x, leftPaddle.y-leftPaddle.height/2, leftPaddle.width, leftPaddle.height);
+  context.stroke();
+  context.closePath();
+  // draw right paddle
   context.rect(rightPaddle.x, rightPaddle.y-rightPaddle.height/2, rightPaddle.width, rightPaddle.height);
   context.stroke();
   context.closePath();
@@ -62,7 +67,10 @@ var update = function () {
   pongBall.y += pongBall.dy;
   if( pongBall.x + pongBall.rad >= canvasWidth
     || pongBall.x - pongBall.rad <= 0 
-    || pongBall.x + pongBall.rad >= rightPaddle.x ) pongBall.dx = -pongBall.dx;
+    || pongBall.x + pongBall.rad >= rightPaddle.x 
+    || (pongBall.x - pongBall.rad <= leftPaddle.x+leftPaddle.width 
+      && pongBall.y < leftPaddle.y + leftPaddle.height/2
+      && pongBall.y > leftPaddle.y - leftPaddle.height/2)) pongBall.dx = -pongBall.dx;
   if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) pongBall.dy = -pongBall.dy;
   // redraw
   draw();
