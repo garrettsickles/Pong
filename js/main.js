@@ -13,8 +13,9 @@ var initialize_canvas = function() {
 } 
   
 var pongBall = {
-  dx: 0,
-  dy: 0,
+  dx: 1,
+  dy: 1,
+  rad: 10,
   x: canvasWidth / 2,
   y: canvasHeight / 2
 }
@@ -30,6 +31,9 @@ var rightPaddle = {
 }
 
 var draw = function () {
+  // clear the board
+  context.clearRect(0,0,canvasWidth, canvasHeight);
+
   // draw paddles and ball
   
 
@@ -41,7 +45,16 @@ var draw = function () {
 }
 
 var update = function () {
-  // check logic
+  // update left paddle
+
+  // update right paddle
+
+  // move ball
+  pongBall.x += pongBall.dx;
+  pongBall.y += pongBall.dy;
+  if( pongBall.x + pongBall.rad >= canvasWidth || pongBall.x - pongBall.rad <= 0 ) pongBall.dx = -pongBall.dx;
+  if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) pongBall.dy = -pongBall.dy;
+  // redraw
   draw();
 }
 
