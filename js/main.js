@@ -1,5 +1,5 @@
 var canvas;
-var fps = 30;
+var fps = 60;
 var context; 
 var canvasHeight = 500;
 var canvasWidth = 500;
@@ -27,6 +27,8 @@ var leftPaddle = {
 
 var rightPaddle = {
   x: canvasWidth - 20,
+  height: 100,
+  width: 10,
   y: canvasHeight / 2
 }
 
@@ -38,10 +40,8 @@ var draw = function () {
   context.strokeStyle = "white";
 
   // draw paddles and ball
-  var height = 100;
-  var width = 10;
 
-  context.rect(rightPaddle.x, rightPaddle.y-height/2, width, height);
+  context.rect(rightPaddle.x, rightPaddle.y-rightPaddle.height/2, rightPaddle.width, rightPaddle.height);
   context.stroke();
   context.closePath();
   // draw ball
@@ -55,7 +55,7 @@ var update = function () {
   // update left paddle
 
   // update right paddle
-  rightPaddle.y += pongBall.dy; 
+  if( rightPaddle.y + rightPaddle.height / 2 + pongBall.dy < canvasHeight && rightPaddle.y - rightPaddle.height / 2 + pongBall.dy > 0 ) rightPaddle.y += pongBall.dy; 
   
   // move ball
   pongBall.x += pongBall.dx;
