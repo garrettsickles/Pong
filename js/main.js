@@ -15,9 +15,9 @@ var initializeControls = function() {
   document.onkeydown = function(e) {
     if (!mover) {
       if (e.keyCode == 38) {
-        mover = setInterval(function() {leftPaddle.y -= paddleSpeed;}, moverLatency); 
+        mover = setInterval(function() { leftPaddle.y-leftPaddle.height/2 >= 0 ? leftPaddle.y -= paddleSpeed : null;}, moverLatency); 
       } else if (e.keyCode == 40) {
-        mover = setInterval(function() {leftPaddle.y += paddleSpeed;}, moverLatency); 
+        mover = setInterval(function() {leftPaddle.y+leftPaddle.height/2 <= canvasHeight ? leftPaddle.y += paddleSpeed : null;}, moverLatency); 
       }
     }
   };
@@ -110,7 +110,7 @@ var update = function () {
       && pongBall.y > leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
   {
     pongBall.dx = -pongBall.dx;
-    pongBall.dy = -1.0 * pongBall.dy;
+    pongBall.dy = pongBall.dy;
   }
   if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) pongBall.dy = -pongBall.dy;
   // redraw
