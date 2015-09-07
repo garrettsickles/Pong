@@ -105,6 +105,7 @@ var update = function () {
   pongBall.x += pongBall.dx;
   pongBall.y += pongBall.dy;
 
+  // Hit the Computer Wall
   if (pongBall.x + pongBall.rad >= canvasWidth
       && (pongBall.y > rightPaddle.y + rightPaddle.height/2 + pongBall.rad
       || pongBall.y < rightPaddle.y - rightPaddle.height/2 - pongBall.rad))
@@ -112,6 +113,8 @@ var update = function () {
     pongBall.dy = pongBall.dy;
     pongBall.dx = -pongBall.dx;
   }
+
+  // Hit the User Wall
   if (pongBall.x - pongBall.rad <= 0
       && (pongBall.y > leftPaddle.y + leftPaddle.height/2 + pongBall.rad
       || pongBall.y < leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
@@ -120,6 +123,7 @@ var update = function () {
     pongBall.dx = -pongBall.dx;
   }
 
+  // Hit the Computer Paddle
   if (pongBall.x + pongBall.rad >= rightPaddle.x - rightPaddle.width 
       && pongBall.y < rightPaddle.y + rightPaddle.height/2 + pongBall.rad
       && pongBall.y > rightPaddle.y - rightPaddle.height/2 - pongBall.rad)
@@ -128,19 +132,22 @@ var update = function () {
     pongBall.dx = -pongBall.dx;
   }
 
+  // Hit the User Paddle
   if (pongBall.x - pongBall.rad <= leftPaddle.x+leftPaddle.width 
       && pongBall.y < leftPaddle.y + leftPaddle.height/2 + pongBall.rad
       && pongBall.y > leftPaddle.y - leftPaddle.height/2 - pongBall.rad)
   {
+    // Maintain Same Magnitude of Velocity
     var mag = Math.sqrt(pongBall.dy*pongBall.dy + pongBall.dx*pongBall.dx);
     pongBall.dy = mag * ((pongBall.y - leftPaddle.y) / ((leftPaddle.height+2*pongBall.rad) * 0.5));
     pongBall.dx = (Math.sqrt(mag*mag - pongBall.dy*pongBall.dy));
-    console.log(pongBall.dx);
   }
 
+  // Hit top or bottom walls
   if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) {
     pongBall.dy = -pongBall.dy;
   }
+
   // redraw
   draw();
 }
