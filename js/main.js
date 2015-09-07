@@ -94,25 +94,53 @@ var draw = function () {
 }
 
 var update = function () {
-  // update left paddle
 
   // update right paddle
-  if ( rightPaddle.y + rightPaddle.height / 2 + pongBall.dy < canvasHeight && rightPaddle.y - rightPaddle.height / 2 + pongBall.dy > 0 ) rightPaddle.y += pongBall.dy; 
-  
+  if ( rightPaddle.y + rightPaddle.height / 2 + pongBall.dy < canvasHeight && rightPaddle.y - rightPaddle.height / 2 + pongBall.dy > 0 )
+  {
+    rightPaddle.y += pongBall.dy; 
+  }
+
   // move ball
   pongBall.x += pongBall.dx;
   pongBall.y += pongBall.dy;
-  if( pongBall.x + pongBall.rad >= canvasWidth
-    || pongBall.x - pongBall.rad <= 0 
-    || pongBall.x + pongBall.rad >= rightPaddle.x 
-    || (pongBall.x - pongBall.rad <= leftPaddle.x+leftPaddle.width 
-      && pongBall.y < leftPaddle.y + leftPaddle.height/2 + pongBall.rad
-      && pongBall.y > leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
+
+  if (pongBall.x + pongBall.rad >= canvasWidth
+      && (pongBall.y > rightPaddle.y + rightPaddle.height/2 + pongBall.rad
+      || pongBall.y < rightPaddle.y - rightPaddle.height/2 - pongBall.rad))
   {
-    pongBall.dx = -pongBall.dx;
     pongBall.dy = pongBall.dy;
+    pongBall.dx = -pongBall.dx;
   }
-  if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) pongBall.dy = -pongBall.dy;
+  if (pongBall.x - pongBall.rad <= 0
+      && (pongBall.y > leftPaddle.y + leftPaddle.height/2 + pongBall.rad
+      || pongBall.y < leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
+  {
+    pongBall.dy = pongBall.dy;
+    pongBall.dx = -pongBall.dx;
+  }
+
+  if (pongBall.x + pongBall.rad >= rightPaddle.x - rightPaddle.width 
+      && pongBall.y < rightPaddle.y + rightPaddle.height/2 + pongBall.rad
+      && pongBall.y > rightPaddle.y - rightPaddle.height/2 - pongBall.rad)
+  {
+    pongBall.dy = pongBall.dy;
+    pongBall.dx = -pongBall.dx;
+  }
+
+  if (pongBall.x - pongBall.rad <= leftPaddle.x+leftPaddle.width 
+      && pongBall.y < leftPaddle.y + leftPaddle.height/2 + pongBall.rad
+      && pongBall.y > leftPaddle.y - leftPaddle.height/2 - pongBall.rad)
+  {
+    var mag = Math.sqrt(pongBall.dy*pongBall.dy + pongBall.dx*pongBall.dx);
+    pongBall.dy = mag * ((pongBall.y - leftPaddle.y) / ((leftPaddle.height+2*pongBall.rad) * 0.5));
+    pongBall.dx = (Math.sqrt(mag*mag - pongBall.dy*pongBall.dy));
+    console.log(pongBall.dx);
+  }
+
+  if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) {
+    pongBall.dy = -pongBall.dy;
+  }
   // redraw
   draw();
 }
