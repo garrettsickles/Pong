@@ -1,6 +1,6 @@
 # Pong
 Pong Game for CSCI 445
-
+garrettsickles.github.com/Pong
 
 ## Responsibilities
 Garrett Sickles:
