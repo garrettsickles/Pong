@@ -4,8 +4,10 @@ var fps = 60;
 var paddleSpeed = 5;
 var maxPaddleSpeed = 50;
 
-var mover;
+var mover = null;
 var moverLatency = 10;
+
+var playing = null;
 
 var context; 
 var canvasHeight = 500;
@@ -13,6 +15,9 @@ var canvasWidth = 500;
 
 var initializeControls = function() {
   document.onkeydown = function(e) {
+    if (e.keyCode == 32 && !playing) {
+      playing = setInterval(gameplay, 1000 / fps );
+    }
     if (!mover) {
       if (e.keyCode == 38) {
         mover = setInterval(function() { leftPaddle.y-leftPaddle.height/2 >= 0 ? leftPaddle.y -= paddleSpeed : null;}, moverLatency); 
@@ -38,6 +43,20 @@ var initializeCanvas = function() {
   canvas.width = canvasWidth;
   canvas.height = canvasWidth;
   context = canvas.getContext('2d');
+}
+
+var initializeGame = function() {
+  var angle = Math.random() * 2.0 * Math.PI;
+  pongBall.x = canvasWidth / 2;
+  pongBall.y = canvasHeight / 2;
+  pongBall.dx = 11.0 * Math.sin(angle);
+  pongBall.dy = 11.0 * Math.cos(angle); 
+
+  leftPaddle.x = 20;
+  leftPaddle.y = canvasHeight / 2;
+
+  rightPaddle.x = canvasWidth - 20;
+  rightPaddle.y = canvasHeight / 2;
 }
 
 var pongBall = {
@@ -93,7 +112,7 @@ var draw = function () {
   context.closePath();
 }
 
-var update = function () {
+var gameplay = function () {
 
   // update right paddle
   if ( rightPaddle.y + rightPaddle.height / 2 + pongBall.dy < canvasHeight && rightPaddle.y - rightPaddle.height / 2 + pongBall.dy > 0 )
@@ -119,8 +138,9 @@ var update = function () {
       && (pongBall.y > leftPaddle.y + leftPaddle.height/2 + pongBall.rad
       || pongBall.y < leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
   {
-    pongBall.dy = pongBall.dy;
-    pongBall.dx = -pongBall.dx;
+    clearInterval(playing);
+    playing = null;
+    initializeGame();
   }
 
   // Hit the Computer Paddle
@@ -155,5 +175,5 @@ var update = function () {
 window.onload = function() {
   initializeControls();
   initializeCanvas();
-  setInterval(update, 1000 / fps );
+  initializeGame();
 }
