@@ -11,7 +11,8 @@ var playing = null;
 var timing = null;
 var maxTime = 0.0;
 
-var context; 
+var context;
+var drawing = null;
 var canvasHeight = 500;
 var canvasWidth = 500;
 
@@ -223,13 +224,11 @@ var gameplay = function () {
   if( pongBall.y + pongBall.rad >= canvasHeight || pongBall.y - pongBall.rad <= 0 ) {
     pongBall.dy = -pongBall.dy;
   }
-
-  // redraw
-  draw();
 }
 
 window.onload = function() {
   initializeControls();
   initializeCanvas();
   initializeGame();
+  drawing = setInterval(draw, 1000 / fps);
 }
