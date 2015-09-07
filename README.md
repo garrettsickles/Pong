@@ -1,8 +1,6 @@
 # Pong
 Pong Game for CSCI 445
 
-http://www.garrettsickles.github.com/Pong
-
 ## Responsibilities
 Garrett Sickles:
 * Maintaining up-to-date gh-pages branch
