@@ -8,15 +8,53 @@ var mover = null;
 var moverLatency = 10;
 
 var playing = null;
+var timing = null;
+var maxTime = 0.0;
 
 var context; 
 var canvasHeight = 500;
 var canvasWidth = 500;
 
+var bestTime = {
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+}
+
+var currentTime = {
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+}
+
+var pongBall = {
+  dx: -10,
+  dy: -1,
+  rad: 10,
+  x: canvasWidth / 2,
+  y: canvasHeight / 2
+}
+
+var leftPaddle = { 
+  height: 100,
+  width: 10,
+  x: 20,
+  y: canvasHeight / 2
+}
+
+var rightPaddle = {
+  x: canvasWidth - 20,
+  height: 100,
+  width: 10,
+  y: canvasHeight / 2
+}
+
 var initializeControls = function() {
   document.onkeydown = function(e) {
-    if (e.keyCode == 32 && !playing) {
+    if (e.keyCode == 32 && !playing && !timing) {
       playing = setInterval(gameplay, 1000 / fps );
+      document.querySelector('#stopwatch').innerHTML = '00:00:00';
+      timing = setInterval(gameTimer, 1000);
     }
     if (!mover) {
       if (e.keyCode == 38) {
@@ -59,28 +97,6 @@ var initializeGame = function() {
   rightPaddle.y = canvasHeight / 2;
 }
 
-var pongBall = {
-  dx: -10,
-  dy: -1,
-  rad: 10,
-  x: canvasWidth / 2,
-  y: canvasHeight / 2
-}
-
-var leftPaddle = { 
-  height: 100,
-  width: 10,
-  x: 20,
-  y: canvasHeight / 2
-}
-
-var rightPaddle = {
-  x: canvasWidth - 20,
-  height: 100,
-  width: 10,
-  y: canvasHeight / 2
-}
-
 var draw = function () {
   // clear the board
   context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -112,6 +128,48 @@ var draw = function () {
   context.closePath();
 }
 
+var gameTimer = function() {
+  currentTime.seconds += 1.0;
+  if (currentTime.seconds == 60.0) {
+    currentTime.seconds = 0.0;
+    currentTime.minutes += 1.0;
+  }
+  if (currentTime.minutes == 60.0) {
+    currentTime.minutes = 0.0;
+    currentTime.hours += 1.0;
+  }
+  var sw = document.querySelector('#stopwatch');
+  sw.innerHTML = '';
+  currentTime.hours < 10.0 ? sw.innerHTML += '0' : null;
+  sw.innerHTML += Math.floor(currentTime.hours);
+  sw.innerHTML += ':';
+  currentTime.minutes < 10.0 ? sw.innerHTML += '0' : null;
+  sw.innerHTML += Math.floor(currentTime.minutes);
+  sw.innerHTML += ':';
+  currentTime.seconds < 10.0 ? sw.innerHTML += '0' : null;
+  sw.innerHTML += Math.floor(currentTime.seconds);
+}
+
+var resetGame = function() {
+  clearInterval(playing);
+  clearInterval(timing);
+  var ct = currentTime.seconds + currentTime.minutes*60.0 + currentTime.hours*3600.0;
+  var bt = bestTime.seconds + bestTime.minutes*60.0 + bestTime.hours*3600.0;
+  if (ct > bt) {
+    window.alert('New Best Time!');
+    document.querySelector('#bestTime').innerHTML = document.querySelector('#stopwatch').innerHTML;
+    bestTime.seconds = currentTime.seconds;
+    bestTime.minutes = currentTime.minutes;
+    bestTime.hours = currentTime.hours;
+  }
+  currentTime.seconds = 0.0;
+  currentTime.minutes = 0.0;
+  currentTime.hours = 0.0;
+  playing = null;
+  timing = null;
+  initializeGame();
+}
+
 var gameplay = function () {
 
   // update right paddle
@@ -138,9 +196,7 @@ var gameplay = function () {
       && (pongBall.y > leftPaddle.y + leftPaddle.height/2 + pongBall.rad
       || pongBall.y < leftPaddle.y - leftPaddle.height/2 - pongBall.rad))
   {
-    clearInterval(playing);
-    playing = null;
-    initializeGame();
+    resetGame();
   }
 
   // Hit the Computer Paddle

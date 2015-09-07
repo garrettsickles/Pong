@@ -1,6 +1,9 @@
 
-h1, p {
+body {
   font-family: sans-serif, arial;
+}
+
+h1, p {
   text-align: center;
 }
 
