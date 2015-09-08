@@ -15,3 +15,15 @@ h1, p {
   min-height: 500px;
   box-shadow: 10px 10px 5px #888888;
 }
+
+#best {
+  float: left;
+  margin-left: 27%;
+  text-align: center;
+}
+
+#current {
+  float: right;
+  margin-right: 27%;
+  text-align: center;
+}
