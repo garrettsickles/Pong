@@ -85,11 +85,11 @@ var initializeCanvas = function() {
 }
 
 var initializeGame = function() {
-  var angle = Math.random() * 2.0 * Math.PI;
+  var angle = ((Math.random() - 0.5) * 2.0 * Math.PI / 3.0);
   pongBall.x = canvasWidth / 2;
   pongBall.y = canvasHeight / 2;
-  pongBall.dx = 11.0 * Math.sin(angle);
-  pongBall.dy = 11.0 * Math.cos(angle); 
+  pongBall.dx = 11.0 * Math.cos(angle);
+  pongBall.dy = 11.0 * Math.sin(angle); 
 
   leftPaddle.x = 20;
   leftPaddle.y = canvasHeight / 2;
@@ -216,6 +216,7 @@ var gameplay = function () {
   {
     // Maintain Same Magnitude of Velocity
     var mag = Math.sqrt(pongBall.dy*pongBall.dy + pongBall.dx*pongBall.dx);
+
     pongBall.dy = mag * ((pongBall.y - leftPaddle.y) / ((leftPaddle.height+2*pongBall.rad) * 0.5));
     pongBall.dx = (Math.sqrt(mag*mag - pongBall.dy*pongBall.dy));
   }
