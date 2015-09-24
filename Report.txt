@@ -1,0 +1,4 @@
+Jacob Adelgren & Garrett Sickles
+The Game of Pong
+
+The CSS3 features we used in our game were box shadow on our pong board, font shadow on our title, and radial color gradient background. We did not use any cool javascript libraries however our game used multiple listeners and threaded keystoke movements to maintain responsive user interaction. We also implemented a dynamic paddle reflection system so the user can control the angle the ball leaves the paddle based on how far towards the top or bottom of the ball impacts the paddle. The most difficult features to implement were insuring game timing updated and did not break so that the user could simulate a high score experience in our game.
